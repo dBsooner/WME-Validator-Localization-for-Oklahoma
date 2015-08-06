@@ -111,6 +111,8 @@ window.WME_Validator_United_States = {
 	"solutionEN": "Rename the Street or Alt Street",
 	"template": "${type}#${state}:${street}@#${altStreet[@#]}@",
       //Cannot limit this to ${city} due to suburbs of Tulsa also use Tulsa street naming conventions. If changed to ${city}, a longer matching pattern would need to be created to include all Tulsa Suburbs.
+      //New Check for N/S with East/West instead of E/W.
+      //^(?!4).*Oklahoma:.*((E|East) [0-9]{1,3}(st|nd|rd|th) (St|Street|Pl|Ct|Cr|Cir) S)|((N(orth)?|S(outh)?) ?[0-9]{1,3}(st|nd|rd|th|) ?(West|East) ?(Av|Pl|Ct|Cr|Cir))
 	"regexp": "/^(?!4).*Oklahoma:.*((E|East) [0-9]{1,3}(st|nd|rd|th) (St|Street|Pl|Ct|Cr|Cir) S)|((N |S )[0-9]{1,3}(st|nd|rd|th|) ?[WE]? ?(Av|Pl|Ct|Cr|Cir))/i"
   },
   "136.solutionLink": "W:Oklahoma#Roads",    
