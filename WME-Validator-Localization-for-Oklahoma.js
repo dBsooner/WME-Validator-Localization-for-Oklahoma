@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name                WME Validator Localization for Oklahoma
 // @namespace           https://greasyfork.org/en/scripts/11505-wme-validator-localization-for-oklahoma
-// @version             2.0.1
+// @version             2.0.2
 // @author              dBsooner | turnertr
 // @description         This script localizes WME Validator for United States/Oklahoma. You also need main package (WME Validator) installed.
 // @match               https://editor-beta.waze.com/*editor/*
@@ -29,12 +29,14 @@
     },
     *Note: use D at the beginning of RegExp to enable debugging on JS console.
     *Note: do not forget to escape backslashes in strings, i.e. use "\\" instead of "\".
+	
+	TODO: Add better EXIT check similar to what I did in Massachusetts. 
 */
 window.WME_Validator_United_States = {
   ".country": "United States/Oklahoma",
   ".codeISO": "US",
   ".author": "dBsooner",
-  ".updated": "2015-08-05",
+  ".updated": "2015-08-06",
   ".link": "TODO: ",
   
    //Default US checks
@@ -76,6 +78,7 @@ window.WME_Validator_United_States = {
     "regexp": "/^Oklahoma:.*(?!(SH|CR|US|I)-[0-9]{1,3} ?[A-Za-z]{0,5})([Ii](- | -|-|=| =|= )?|[Uu]\.?[Ss]\.?( [Hh](WY|wy|ighway)| Rte| -|- |-|=| =|= )?|([Oo][Kk]|[Ss]tate|[Cc](ounty|[Oo])) ?([Hh](WY|wy|ighway)|[Rr][Dd]|Rte)|(([Oo][Kk]|([Ss]|[Cc])([Hh]|[Rr]))(- | -|-|=| =|= ))) ?[0-9]{1,3} ?[A-Za-z]{0,5}/"
   },
   "132.solutionLink": "W:Oklahoma",
+  // ADD INTERSTATE TO THIS CHECK, INCLUDING ALL EXTENSIONS FOR INTERSTATES
   "133.enabled": true,
   "133.params": {
 	"titleEN": "Wrong road type (major)",
@@ -85,6 +88,7 @@ window.WME_Validator_United_States = {
 	"regexp": "/^[1-9][^245]?:.*#(US Hwy |US-)[0-9]+( ALT| BYP| CONN| TRUCK| Scenic| [NSWE])*@/i"
   },
   "133.solutionLink": "W:Road_types/USA#Major_Highway",
+  // ADD EXTRA EXTENSIONS TO THIS CHECK
   "134.enabled": true,
   "134.params": {
 	"titleEN": "Wrong road type (minor)",
@@ -109,11 +113,10 @@ window.WME_Validator_United_States = {
 	"titleEN": "Tulsa Metro: Incorrect Street Name Format",
 	"problemEN": "Tulsa Metro Street Types: N/S Segments should not have East/West abbreviated. E/W Segments south of Admiral and East of Main should not have trailing 'S' or 'South'. (Excludes ramps)",
 	"solutionEN": "Rename the Street or Alt Street",
-	"template": "${type}#${state}:${street}@#${altStreet[@#]}@",
-      //Cannot limit this to ${city} due to suburbs of Tulsa also use Tulsa street naming conventions. If changed to ${city}, a longer matching pattern would need to be created to include all Tulsa Suburbs.
+	"template": "${type}#${state}:@${city}:${street}@#${altStreet[@#]}@",
       //New Check for N/S with East/West instead of E/W.
-      //^(?!4).*Oklahoma:.*((E|East) [0-9]{1,3}(st|nd|rd|th) (St|Street|Pl|Ct|Cr|Cir) S)|((N(orth)?|S(outh)?) ?[0-9]{1,3}(st|nd|rd|th|) ?(West|East) ?(Av|Pl|Ct|Cr|Cir))
-	"regexp": "/^(?!4).*Oklahoma:.*((E|East) [0-9]{1,3}(st|nd|rd|th) (St|Street|Pl|Ct|Cr|Cir) S)|((N |S )[0-9]{1,3}(st|nd|rd|th|) ?[WE]? ?(Av|Pl|Ct|Cr|Cir))/i"
+      //^(?!4).*Oklahoma:.*(@Tulsa:(E|East) [0-9]{1,3}(st|nd|rd|th) (St|Street|Pl|Ct|Cr|Cir) S)|((N(orth)?|S(outh)?) ?[0-9]{1,3}(st|nd|rd|th|) ?(West|East) ?(Av|Pl|Ct|Cr|Cir))
+	"regexp": "/^(?!4).*Oklahoma:.*(@Tulsa:(E|East) [0-9]{1,3}(st|nd|rd|th) (St|Street|Pl|Ct|Cr|Cir) S)|((N |S )[0-9]{1,3}(st|nd|rd|th|) ?[WE]? ?(Av|Pl|Ct|Cr|Cir))/i"
   },
   "136.solutionLink": "W:Oklahoma#Roads",    
   "137.enabled": true,
