@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name                WME Validator Localization for Oklahoma
 // @namespace           https://greasyfork.org/en/scripts/11505-wme-validator-localization-for-oklahoma
-// @version             2.0.2
+// @version             2.0.3
 // @author              dBsooner | turnertr
 // @description         This script localizes WME Validator for United States/Oklahoma. You also need main package (WME Validator) installed.
 // @match               https://editor-beta.waze.com/*editor/*
@@ -31,12 +31,15 @@
     *Note: do not forget to escape backslashes in strings, i.e. use "\\" instead of "\".
 	
 	TODO: Add better EXIT check similar to what I did in Massachusetts. 
+	
+	Changelog:
+	2.0.3: Combined I/US/SH Checks into one, Modified Tulsa Checks to only check TULSA for E/W trailing S
 */
 window.WME_Validator_United_States = {
   ".country": "United States/Oklahoma",
   ".codeISO": "US",
   ".author": "dBsooner",
-  ".updated": "2015-08-06",
+  ".updated": "2015-08-07",
   ".link": "TODO: ",
   
    //Default US checks
@@ -75,60 +78,39 @@ window.WME_Validator_United_States = {
 	"problemEN": "Oklahoma uses CR for county road, SH for state highway, US for national highway, and I for interstate names",
 	"solutionEN": "Rename the Street or Alt Street",
 	"template": "${state}:${street}#${altStreet[#]}",
-    "regexp": "/^Oklahoma:.*(?!(SH|CR|US|I)-[0-9]{1,3} ?[A-Za-z]{0,5})([Ii](- | -|-|=| =|= )?|[Uu]\.?[Ss]\.?( [Hh](WY|wy|ighway)| Rte| -|- |-|=| =|= )?|([Oo][Kk]|[Ss]tate|[Cc](ounty|[Oo])) ?([Hh](WY|wy|ighway)|[Rr][Dd]|Rte)|(([Oo][Kk]|([Ss]|[Cc])([Hh]|[Rr]))(- | -|-|=| =|= ))) ?[0-9]{1,3} ?[A-Za-z]{0,5}/"
+    "regexp": "/^Oklahoma:.*(?!(SH|CR|US|I)-[0-9]+ ?[A-Za-z]*)([Ii](- | -|-|=| =|= )?|[Uu]\.?[Ss]\.?( [Hh](WY|wy|ighway)| Rte| -|- |-|=| =|= )?|([Oo][Kk]|[Ss]tate|[Cc](ounty|[Oo])) ?([Hh](WY|wy|ighway)|[Rr][Dd]|Rte)|(([Oo][Kk]|([Ss]|[Cc])([Hh]|[Rr]))(- | -|-|=| =|= ))) ?[0-9]+ ?[A-Za-z]*/"
   },
   "132.solutionLink": "W:Oklahoma",
-  // ADD INTERSTATE TO THIS CHECK, INCLUDING ALL EXTENSIONS FOR INTERSTATES
   "133.enabled": true,
   "133.params": {
-	"titleEN": "Wrong road type (major)",
-	"problemEN": "All US Highways should be at least Major Highway (except BUS, SPUR, LOOP)",
-	"solutionEN": "Change the road type to Major Highway",
+	"titleEN": "Wrong road type (freeway/major/minor/PS)",
+	"problemEN": "All non-BUS/SPUR/LOOP Interstates should be Freeway. All BUS/SPUR/LOOP Interstates and non-BUS/SPUR/LOOP US Highways should be at least Major Highway. All BUS/SPUR/LOOP US Highways and non-BUS/SPUR/LOOP State Highways should be at least Minor Highway. All BUS/SPUR/LOOP State Highways should be at least Primary Street.",
+	"solutionEN": "Change the road type to Freeway or Major Highway",
 	"template": "${typeRank}:#${street}@#${altStreet[@#]}@",
-	//(US Hwy |US-)[0-9]+(?(?!SPUR|LOOP|BUS).)*@
-	"regexp": "/^[1-9][^245]?:.*#(US Hwy |US-)[0-9]+( ALT| BYP| CONN| TRUCK| Scenic| [NSWE])*@/i"
+	"regexp": "/^(1[^25]?:#I-[0-9]+[A-Za-z]? ?(?:(?!SPUR|LOOP|BUS).)*)@|^[1-9][^245]?:#.*(I-[0-9]+[A-Za-z]* ?(SPUR|BUS|LOOP).*@)|^[1-9][^245]?:#.*(US-[0-9]+(?:(?!SPUR|LOOP|BUS).)*)@|^[1-9][^2-5]:.*#(SH-[0-9]+(?:(?!SPUR|LOOP|BUS).)*)@|^[1-9][^2-5]:.*#(US-)[0-9]+( BUS| LOOP| SPUR)+( [NSWE])?.*@|^[1-9][^1-5]:.*#(SH-)[0-9]+( BUS| LOOP| SPUR)+( [NSWE])?.*@/i"
   },
-  "133.solutionLink": "W:Road_types/USA#Major_Highway",
-  // ADD EXTRA EXTENSIONS TO THIS CHECK
-  "134.enabled": true,
-  "134.params": {
-	"titleEN": "Wrong road type (minor)",
-	"problemEN": "All US BUS, SPUR, LOOP highways and State Highways (except BUS, SPUR, LOOP) should be at least Minor Highway type",
-	"solutionEN": "Change the road type to Minor Highway",
-	"template": "${typeRank}:#${street}@#${altStreet[@#]}@",
-	"regexp": "/^[1-9][^2-5]:.*#((State Hwy |SR-|SH-|IL-|IN-|K-|LA-|M-|MA-|MO-|MS-|NC-|ND-|NJ-|NV-|NY-|SC-|SD-|TN-|VT-|WIS-)[0-9]+( ALT| BYP| CONN| TRUCK| Scenic| [NSWE])*|(US Hwy |US-)[0-9]+( BUS| LOOP| SPUR)+( [NSWE])?)@/i"
-  },
-  "134.solutionLink": "W:Road_types/USA#Minor_Highway",
-  "135.enabled": true,
-  "135.params": {
-	"titleEN": "Wrong road type (primary)",
-	"problemEN": "All State BUS, SPUR, LOOP Highways should be at least Primary Street type",
-	"solutionEN": "Change the road type to Primary Street",
-	"template": "${typeRank}:#${street}@#${altStreet[@#]}@",
-	"regexp": "/^[1-9][^1-5]:.*#(State Hwy |SR-|SH-|IL-|IN-|K-|LA-|M-|MA-|MO-|MS-|NC-|ND-|NJ-|NV-|NY-|SC-|SD-|TN-|VT-|WIS-)[0-9]+( BUS| LOOP| SPUR)+( [NSWE])?@/i"
-  },
-  "135.solutionLink": "W:Road_types/USA#Primary_Street",
-  "136.enabled": true,    
+  "133.solutionLink": "W:Road_types/USA#Quick_reference_chart",
+  "134.enabled": true,    
   //"136.severity": "warning",
-  "136.params": {
+  "134.params": {
 	"titleEN": "Tulsa Metro: Incorrect Street Name Format",
 	"problemEN": "Tulsa Metro Street Types: N/S Segments should not have East/West abbreviated. E/W Segments south of Admiral and East of Main should not have trailing 'S' or 'South'. (Excludes ramps)",
 	"solutionEN": "Rename the Street or Alt Street",
 	"template": "${type}#${state}:@${city}:${street}@#${altStreet[@#]}@",
       //New Check for N/S with East/West instead of E/W.
       //^(?!4).*Oklahoma:.*(@Tulsa:(E|East) [0-9]{1,3}(st|nd|rd|th) (St|Street|Pl|Ct|Cr|Cir) S)|((N(orth)?|S(outh)?) ?[0-9]{1,3}(st|nd|rd|th|) ?(West|East) ?(Av|Pl|Ct|Cr|Cir))
-	"regexp": "/^(?!4).*Oklahoma:.*(@Tulsa:(E|East) [0-9]{1,3}(st|nd|rd|th) (St|Street|Pl|Ct|Cr|Cir) S)|((N |S )[0-9]{1,3}(st|nd|rd|th|) ?[WE]? ?(Av|Pl|Ct|Cr|Cir))/i"
+	"regexp": "/^(?!4).*Oklahoma:.*((@Tulsa:(E(ast)?) [0-9]+(st|nd|rd|th) ?(S(outh)?)? ?(St(reet)?|Pl(ace)?|C(our)?t|C(i)?r(cle)?|B(ou)?l(a)?v(ar)?d) S(outh)?)|((N |S )[0-9]+(st|nd|rd|th|) ?[WE]? ?(Av(e|enue)?|Pl(ace)?|C(our)?t|C(i)?r(cle)?))).*@/i"
   },
-  "136.solutionLink": "W:Oklahoma#Roads",    
-  "137.enabled": true,
-  "137.params": {
+  "134.solutionLink": "W:Oklahoma#Roads",    
+  "135.enabled": true,
+  "135.params": {
     "titleEN": "Bad TTS Street name",
     "problemEN": "Streets that start with St and Dr result in TTS reading Street or Drive",
     "solutionEN": "Add a period after Jr or St or Dr where required",
     "template": "${street}#${altStreet[#]}",
     "regexp": "/^([SNEW] )+(St |Dr )|^St |^Dr |Jr |Rev /"
   },
-  "137.solutionLink": "W:Abbreviations_and_acronyms#Standard_suffix_abbreviations",
+  "135.solutionLink": "W:Abbreviations_and_acronyms#Standard_suffix_abbreviations",
   //Freeway Lock
   "150.enabled": true,
   "150.params": {
